@@ -1,0 +1,13 @@
+---
+name: elpaaso-sandbox
+packages: []
+templates:
+  bin/monit_debugger: bin/monit_debugger
+  bin/elpaaso_sandbox_ctl: bin/elpaaso_sandbox_ctl
+  config/elpaaso_sandbox.conf.erb: config/elpaaso_sandbox.conf
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+properties:
+  elpaaso_sandbox.leader_address:
+    description: Hostname/IP to the leader/master of the cluster
