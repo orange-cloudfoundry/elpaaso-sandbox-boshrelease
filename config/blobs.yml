@@ -1,1 +1,5 @@
---- {}
+---
+java8/openjdk-1.8.0_40.tar.gz:
+  object_id: dc127ced-6ff5-4d8b-a29f-b5b386e3977c
+  sha: 590be5c6337753b28acc81d4843e98e6245b5261
+  size: 39630740
