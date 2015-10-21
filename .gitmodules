@@ -1,8 +1,6 @@
 [submodule "src/elpaaso-sandbox-ui"]
 	path = src/elpaaso-sandbox-ui
 	url = https://github.com/Orange-OpenSource/elpaaso-sandbox-ui.git
-
 [submodule "src/elpaaso-sandbox-service"]
 	path = src/elpaaso-sandbox-service
 	url = https://github.com/Orange-OpenSource/elpaaso-sandbox-service.git
-
