@@ -1,0 +1,5 @@
+check process elpaaso-sandbox-ui
+  with pidfile /var/vcap/sys/run/elpaaso-sandbox-ui/elpaaso-sandbox-ui.pid
+  start program "/var/vcap/jobs/elpaaso-sandbox-ui/bin/monit_debugger elpaaso-sandbox-ui_ctl '/var/vcap/jobs/elpaaso-sandbox-ui/bin/elpaaso-sandbox-ui_ctl start'"
+  stop program "/var/vcap/jobs/elpaaso-sandbox-ui/bin/monit_debugger elpaaso-sandbox-ui_ctl '/var/vcap/jobs/elpaaso-sandbox-ui/bin/elpaaso-sandbox-ui_ctl stop'"
+  group vcap
