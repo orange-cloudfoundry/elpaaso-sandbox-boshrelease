@@ -7,3 +7,7 @@ openjdk/jdk-8u72-ea-bin-b02-linux-x64-13_oct_2015.tar.gz:
   object_id: 7c424f3e-e8dd-4d61-8008-6b025a64d4a0
   sha: dc75d18b76b6a7666d738f503dc44fae8483e37f
   size: 126378270
+maven/apache-maven-3.3.3-bin.tar.gz:
+  object_id: 08fdd3cf-5b98-447e-b3b5-67c553b47c0d
+  sha: c8f257dce3381d9d8c420168a6df0fa25664337c
+  size: 8042383
