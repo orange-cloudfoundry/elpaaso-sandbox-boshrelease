@@ -1,0 +1,8 @@
+---
+name: elpaaso-sandbox-ui
+dependencies:
+files:
+- elpaaso-sandbox-ui/**/*
+- openjdk/*
+- maven/*
+- common/setup-java-prepackaging.sh

@@ -1,0 +1,35 @@
+---
+
+logging.level.org.springframework.security: INFO
+logging.level.org.apache.http.wire: INFO
+
+cloudfoundry:
+  apiUrl: https://api.cf.foo.org
+  proxyInfo:
+    enabled: false
+    host:
+    port: 0
+  credentials:
+    userId: xxx
+    password: yyy
+  trustSelfSignedCerts: true
+  org: sandboxes
+  space: default-space
+server:
+  port: 8081
+  tomcat:
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+security:
+  require_ssl: true
+  basic.enabled: false
+  user:
+    password: user
+  oauth2:
+    resource:
+       jwt:
+          keyValue: |
+            -----BEGIN PUBLIC KEY-----
+            MIGfMA0GCSqGSIb3DQEBAQUAA
+            -----END PUBLIC KEY-----
+
