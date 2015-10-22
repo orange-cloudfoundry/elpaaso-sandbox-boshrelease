@@ -1,6 +1,10 @@
 ---
 name: elpaaso-sandbox-ui
-packages: []
+packages:
+- java-common
+- openjdk
+- elpaaso-sandbox-ui
+
 templates:
   bin/elpaaso-sandbox-ui_ctl: bin/elpaaso-sandbox-ui_ctl
   bin/monit_debugger: bin/monit_debugger

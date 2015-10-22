@@ -1,8 +1,12 @@
 ---
 name: elpaaso-sandbox-service
 dependencies:
+- java-common
+- maven
+- openjdk
 files:
 - elpaaso-sandbox-service/**/*
 - openjdk/*
 - maven/*
 - common/setup-java-prepackaging.sh
+

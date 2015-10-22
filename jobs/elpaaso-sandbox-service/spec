@@ -1,6 +1,10 @@
 ---
 name: elpaaso-sandbox-service
-packages: []
+packages: 
+- java-common
+- openjdk
+- elpaaso-sandbox-service
+
 templates:
   bin/elpaaso-sandbox-service_ctl: bin/elpaaso-sandbox-service_ctl
   bin/monit_debugger: bin/monit_debugger

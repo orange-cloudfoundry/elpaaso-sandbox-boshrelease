@@ -1,6 +1,9 @@
 ---
 name: elpaaso-sandbox-ui
 dependencies:
+- java-common
+- maven
+- openjdk
 files:
 - elpaaso-sandbox-ui/**/*
 - openjdk/*
