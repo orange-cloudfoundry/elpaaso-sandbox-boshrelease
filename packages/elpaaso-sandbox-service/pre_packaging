@@ -4,7 +4,7 @@ set -e
 
 
 cd ${BUILD_DIR}/elpaaso-sandbox-service
-mvn -B -e clean install -DskipTests=true
+mvn -B -U -e clean install -DskipTests=true  --settings settings.xml 
 mv target/elpaaso-sandbox-service-0.0.1-SNAPSHOT.jar  ${BUILD_DIR}/elpaaso-sandbox-service.jar
 
 
