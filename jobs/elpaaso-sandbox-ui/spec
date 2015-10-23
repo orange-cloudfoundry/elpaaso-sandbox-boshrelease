@@ -11,3 +11,6 @@ templates:
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
+  application.yml.erb: application.yml
+  logback.xml.erb: logback.xml
+
