@@ -1,0 +1,44 @@
+@startuml
+title Deploying Sandbox UI on ClodFoundry using Flexible SSL
+actor User
+box "Cloud Foundry" #LightBlue
+	participant "HA Proxy Router"
+end box
+box "Bosh VM"
+	participant "Sandbox UI"
+	participant "Sandbox Service"
+end box
+note over "User": xxx.org certificates
+note over "HA Proxy Router":    **https endding**
+
+User -> "HA Proxy Router": **https**://sandbox-ui.cf.xxx.org
+activate "HA Proxy Router"
+note over "HA Proxy Router"
+    add **header**:
+        x-forwarded-for,
+        x-forwarded-proto
+endnote
+"HA Proxy Router" -> "Sandbox UI" : **http**://sandbox-ui.cf.xxx.org
+note over "Sandbox UI"
+    https required:
+        x-forwarded-proto: https
+        ==> reject http
+endnote
+
+note over "Sandbox UI": xxx.org certificates clients
+"Sandbox UI" -> "HA Proxy Router" : **https**://sandbox-service.cf.xxx.org
+note over "HA Proxy Router"
+    add **header**:
+        x-forwarded-for,
+        x-forwarded-proto
+endnote
+"HA Proxy Router" -> "Sandbox Service" : **http**://sandbox-service.cf.xxx.org
+"Sandbox UI" <-- "Sandbox Service": 200 ???
+
+"HA Proxy Router" <-- "Sandbox UI": 200 ???
+User <-- "HA Proxy Router": "org_name","space_name",""CC api'_url"
+deactivate "HA Proxy Router"
+
+@enduml
+
+
