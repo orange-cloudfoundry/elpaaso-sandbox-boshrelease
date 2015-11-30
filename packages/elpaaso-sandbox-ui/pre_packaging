@@ -4,8 +4,8 @@ set -e
 
 
 cd ${BUILD_DIR}/elpaaso-sandbox-ui
-mvn -B -U -e clean install -DskipTests=true   --settings settings.xml
-mv target/elpaaso-sandbox-ui-0.0.1-SNAPSHOT.jar  ${BUILD_DIR}/elpaaso-sandbox-ui.jar
+mvn -B -U -e clean install -DskipTests=true -Pskip-git-info    --settings settings.xml
+mv target/elpaaso-sandbox-ui-1.0-SNAPSHOT.jar  ${BUILD_DIR}/elpaaso-sandbox-ui.jar
 
 
 cd ${BUILD_DIR}
