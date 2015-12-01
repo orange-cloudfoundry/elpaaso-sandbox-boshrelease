@@ -1,9 +1,5 @@
 ---
 name: elpaaso-sandbox-service
-packages: 
-- java-common
-- openjdk
-- elpaaso-sandbox-service
 
 templates:
   bin/elpaaso-sandbox-service_ctl: bin/elpaaso-sandbox-service_ctl
@@ -13,13 +9,15 @@ templates:
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   application.yml.erb: application.yml
   logback.xml.erb: logback.xml
+  
+  
+packages: 
+- java-common
+- openjdk
+- elpaaso-sandbox-service
 
-  
-  
-  
-  
- properties:
-   elpaaso_sandbox_service.xxx:
+properties:
+  elpaaso_sandbox_service.xxx:
     description:
       xxxxxx
     default: 1200

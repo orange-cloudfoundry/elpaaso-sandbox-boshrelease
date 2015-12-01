@@ -1,9 +1,5 @@
 ---
 name: elpaaso-sandbox-ui
-packages:
-- java-common
-- openjdk
-- elpaaso-sandbox-ui
 
 templates:
   bin/elpaaso-sandbox-ui_ctl: bin/elpaaso-sandbox-ui_ctl
@@ -14,10 +10,13 @@ templates:
   application.yml.erb: application.yml
   logback.xml.erb: logback.xml
 
+packages:
+- java-common
+- openjdk
+- elpaaso-sandbox-ui
 
- properties:
-   elpaaso_sandbox_ui.xxx:
+properties:
+  elpaaso_sandbox_ui.xxx:
     description:
       xxxxxx
     default: 1200
-
