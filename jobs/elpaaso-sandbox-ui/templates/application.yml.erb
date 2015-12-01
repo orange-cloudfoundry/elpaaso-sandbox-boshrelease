@@ -1,16 +1,8 @@
 ---
-
-DEBUG: false
-SECURITY_ENABLE_CSRF: false
-SPRING_PROFILES_ACTIVE: orange
-ENABLE_SSL_CERTIFICATE_CHECK: false
-ZUUL_ROUTES_SANDBOXES_URL: http://sandbox-service.foo.org/v1/sandboxes
-#    internal_proxies: 192\.168\.\d{1,3}\.\d{1,3}
-SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI: https://login.cf.foo.org/oauth/token
-SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI: https://login.cf.foo.org/oauth/authorize
-SECURITY_OAUTH2_CLIENT_CLIENT_ID: elpaaso-onboarding
-SECURITY_OAUTH2_CLIENT_CLIENT_SECRET: 1st_JashGips9
-SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE: |
-  -----BEGIN PUBLIC KEY-----
-  MIGfMA0GCSqGSIb3DQEBAQUAA4GNAD
-  -----END PUBLIC KEY-----
+ADMIN_PASSWORD: <%= p('elpaaso_sandbox_ui.xxx') #1cloudOps!
+enableSslCertificateCheck: <%= p('elpaaso_sandbox_ui.xxx') #false
+SANDBOX_SERVICE_URL: <%= p('elpaaso_sandbox_ui.xxx')  #http://elpaaso-sandbox-service.cf.ns.nd-paas.itn.ftgroup
+LOGIN_URL: <%= p('elpaaso_sandbox_ui.xxx') #https://login.nd-cfapi.itn.ftgroup
+SECURITY_OAUTH2_CLIENT_CLIENT_ID: <%= p('elpaaso_sandbox_ui.xxx') #elpaaso-sandbox
+SECURITY_OAUTH2_CLIENT_CLIENT_SECRET: <%= p('elpaaso_sandbox_ui.xxx') #zzzz
+SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE:
