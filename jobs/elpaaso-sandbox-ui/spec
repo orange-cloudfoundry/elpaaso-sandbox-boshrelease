@@ -14,3 +14,10 @@ templates:
   application.yml.erb: application.yml
   logback.xml.erb: logback.xml
 
+
+ properties:
+   elpaaso_sandbox_ui.xxx:
+    description:
+      xxxxxx
+    default: 1200
+
