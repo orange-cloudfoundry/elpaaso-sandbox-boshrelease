@@ -21,5 +21,62 @@ properties:
     description:
       xxxxxx
     default: 1200
+    
+    
+    
+  elpaaso_sandbox_service.security_require_ssl:
+    description:
+      Required SSL by default (using tomcat x-forwarded-for and x-forwarded-proto) on sandbox-service route
+    default: false 
+
+  elpaaso_sandbox_service.security_enable_csrf:
+    description:
+      CSRF protection is enabled by default on sandbox-service route
+    default: true
+
+
+  elpaaso_sandbox_service.enable_ssl_certificate_check:
+    description:
+      Allow to disable SSL certificate checks on $CLOUDFOUNDRY_API_URL.
+      SHOULD NOT BE disabled in production
+    default: false
+
+
+  elpaaso_sandbox_service.cloudfoundry_api_url:
+    description:
+      CloudFoundry CC api url (https://api.yourdomain.com)
+    
+    
+  elpaaso_sandbox_service.cloudfoundry_credentials_user_id:
+    description:
+      CloudFoudry user with Org admin privileges on $CLOUDFOUNDRY_ORG
+
+    
+  elpaaso_sandbox_service.cloudfoundry_credentials_password:
+    description:
+      CloudFoudry user password
+
+  elpaaso_sandbox_service.cloudfoundry_org:
+    description:
+      Name of the CloudFoundry org  to create sandbox spaces. Expected to be created
+
+  elpaaso_sandbox_service.cloudfoundry_space:
+    description:
+      CloudFoundry existing space used at connection time.
+      Only used to enable login by the admin user (cf-java-client v1 limitation).
+      No actions will be performed on this default space
+
+  elpaaso_sandbox_service.security_oauth2_resource_jwt_key:
+    description:
+      OAuth2
+      You have to customize OAuth2 connection info - Required parameter
+
+  elpaaso_sandbox_service.security_oauth2_admin_scope:
+    description:
+      scope required to allow access to sensitive spring actuator endpoint
+    default: cloudcontroller.admin
+
+    
+    
  
   

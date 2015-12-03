@@ -3,10 +3,12 @@
 logging.level.org.springframework.security: INFO
 logging.level.org.apache.http.wire: INFO
 
-CLOUDFOUNDRY_TRUST_SELF_SIGNED_CERTS: <%= p('elpaaso_sandbox_service.xxx') %>
-CLOUDFOUNDRY_API_URL: <%= p('elpaaso_sandbox_service.xxx') %> #https://api.nd-cfapi.itn.ftgroup
-CLOUDFOUNDRY_CREDENTIALS_USER_ID: <%= p('elpaaso_sandbox_service.xxx') %> #sandbox-admin
-CLOUDFOUNDRY_CREDENTIALS_PASSWORD: <%= p('elpaaso_sandbox_service.xxx') %> #yyy
-CLOUDFOUNDRY_ORG: <%= p('elpaaso_sandbox_service.xxx') %> #orange-private-sandboxes
-SECURITY_REQUIRE_SSL: <%= p('elpaaso_sandbox_service.xxx') %> #false
+CLOUDFOUNDRY_TRUST_SELF_SIGNED_CERTS: <%= p('elpaaso_sandbox_service.enable_ssl_certificate_check') %>
+CLOUDFOUNDRY_API_URL: <%= p('elpaaso_sandbox_service.cloudfoundry_api_url') %> #https://api.nd-cfapi.itn.ftgroup
+CLOUDFOUNDRY_CREDENTIALS_USER_ID: <%= p('elpaaso_sandbox_service.cloudfoundry_credentials_user_id') %> #sandbox-admin
+CLOUDFOUNDRY_CREDENTIALS_PASSWORD: <%= p('elpaaso_sandbox_service.cloudfoundry_credentials_password') %> #yyy
+CLOUDFOUNDRY_ORG: <%= p('elpaaso_sandbox_service.cloudfoundry_org') %> #orange-private-sandboxes
+CLOUDFOUNDRY_ORG: <%= p('elpaaso_sandbox_service.cloudfoundry_space') %> 
+
+SECURITY_REQUIRE_SSL: <%= p('elpaaso_sandbox_service.security_require_ssl') %> #false
 SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE: <%= p('elpaaso_sandbox_service.xxx') %> #jwt key
