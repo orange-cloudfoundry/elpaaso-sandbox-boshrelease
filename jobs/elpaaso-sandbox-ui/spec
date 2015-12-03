@@ -20,3 +20,27 @@ properties:
     description:
       xxxxxx
     default: 1200
+
+  admin_password:
+    description:
+      xxxxxx
+  enable_ssl_certificate_check:
+    description:
+      xxxxxx
+    default: false
+  sandbox_service_url:
+    description:
+      xxxxxx
+  login_url:
+    description:
+      xxxxxx
+  oauth2_client_client_id:
+    description:
+      xxxxxx
+  oauth2_client_client_secret:
+    description:
+      xxxxxx
+  oauth2_resource_jwt_key:
+    description:
+      xxxxxx
+
