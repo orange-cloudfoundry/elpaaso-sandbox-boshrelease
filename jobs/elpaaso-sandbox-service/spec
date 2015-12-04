@@ -66,7 +66,7 @@ properties:
       Only used to enable login by the admin user (cf-java-client v1 limitation).
       No actions will be performed on this default space
 
-  elpaaso_sandbox_service.security_oauth2_resource_jwt_key:
+  elpaaso_sandbox_service.oauth2_resource_jwt_key:
     description:
       OAuth2
       You have to customize OAuth2 connection info - Required parameter

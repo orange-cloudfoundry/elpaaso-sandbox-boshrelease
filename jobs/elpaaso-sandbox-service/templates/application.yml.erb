@@ -11,4 +11,5 @@ CLOUDFOUNDRY_ORG: <%= p('elpaaso_sandbox_service.cloudfoundry_org') %> #orange-p
 CLOUDFOUNDRY_ORG: <%= p('elpaaso_sandbox_service.cloudfoundry_space') %> 
 
 SECURITY_REQUIRE_SSL: <%= p('elpaaso_sandbox_service.security_require_ssl') %> #false
-SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE: <%= p('elpaaso_sandbox_service.xxx') %> #jwt key
+SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE: |
+<%= p('elpaaso_sandbox_service.oauth2_resource_jwt_key').gsub('\\n', "\n")  %>
