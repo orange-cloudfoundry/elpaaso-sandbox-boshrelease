@@ -19,7 +19,17 @@ case $1 in
     # store pid in $PIDFILE
     echo $$ > $PIDFILE
 
+	export ADMIN_PASSWORD=<%= p('elpaaso_sandbox_ui.admin_password') %> 
+	export enableSslCertificateCheck=<%= p('elpaaso_sandbox_ui.enable_ssl_certificate_check')  %>
+	export SANDBOX_SERVICE_URL=<%= p('elpaaso_sandbox_ui.sandbox_service_url')   %>
+	export LOGIN_URL=<%= p('elpaaso_sandbox_ui.login_url')  %>
+	export SECURITY_OAUTH2_CLIENT_CLIENT_ID=<%= p('elpaaso_sandbox_ui.oauth2_client_client_id')  %>
+	export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=<%= p('elpaaso_sandbox_ui.oauth2_client_client_secret')  %> 
+	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE= <%= p('elpaaso_sandbox_ui.oauth2_resource_jwt_key').gsub('\\n', "\n")  %>
+
+
     exec chpst -u vcap:vcap $JAVA_HOME/bin/java -jar /var/vcap/packages/elpaaso-sandbox-ui/elpaaso-sandbox-ui.jar \
+         -Dspring.profiles.active=bosh -Dspring.config.location=/var/vcap/jobs/elpaaso-sandbox-ui/application-bosh.yml \
          >>$LOG_DIR/$JOB_NAME.stdout.log \
          2>>$LOG_DIR/$JOB_NAME.stderr.log
 
