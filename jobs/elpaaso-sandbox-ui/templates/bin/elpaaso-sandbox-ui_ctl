@@ -25,11 +25,10 @@ case $1 in
 	export LOGIN_URL=<%= p('elpaaso_sandbox_ui.login_url')  %>
 	export SECURITY_OAUTH2_CLIENT_CLIENT_ID=<%= p('elpaaso_sandbox_ui.oauth2_client_client_id')  %>
 	export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=<%= p('elpaaso_sandbox_ui.oauth2_client_client_secret')  %> 
-	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE= <%= p('elpaaso_sandbox_ui.oauth2_resource_jwt_key').gsub('\\n', "\n")  %>
+	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE= <%= p('elpaaso_sandbox_ui.oauth2_resource_jwt_key').gsub('\\n', "\\\n")  %>
 
 
     exec chpst -u vcap:vcap $JAVA_HOME/bin/java -jar /var/vcap/packages/elpaaso-sandbox-ui/elpaaso-sandbox-ui.jar \
-         -Dspring.profiles.active=bosh -Dspring.config.location=/var/vcap/jobs/elpaaso-sandbox-ui/application-bosh.yml \
          >>$LOG_DIR/$JOB_NAME.stdout.log \
          2>>$LOG_DIR/$JOB_NAME.stderr.log
 
