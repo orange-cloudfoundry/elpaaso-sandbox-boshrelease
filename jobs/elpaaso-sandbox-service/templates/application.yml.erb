@@ -3,7 +3,7 @@
 logging.level.org.springframework.security: INFO
 logging.level.org.apache.http.wire: INFO
 
-CLOUDFOUNDRY_TRUST_SELF_SIGNED_CERTS: <%= p('elpaaso_sandbox_service.enable_ssl_certificate_check') %>
+CLOUDFOUNDRY_TRUST_SELF_SIGNED_CERTS: <%= p('elpaaso_sandbox_service.cloudfoundry_trust_self_signed_certs') %>
 CLOUDFOUNDRY_API_URL: <%= p('elpaaso_sandbox_service.cloudfoundry_api_url') %> #https://api.nd-cfapi.itn.ftgroup
 CLOUDFOUNDRY_CREDENTIALS_USER_ID: <%= p('elpaaso_sandbox_service.cloudfoundry_credentials_user_id') %> #sandbox-admin
 CLOUDFOUNDRY_CREDENTIALS_PASSWORD: <%= p('elpaaso_sandbox_service.cloudfoundry_credentials_password') %> #yyy

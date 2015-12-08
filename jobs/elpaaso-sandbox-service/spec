@@ -24,9 +24,9 @@ properties:
     
     
     
-  elpaaso_sandbox_service.security_require_ssl:
+  elpaaso_sandbox_service.cloudfoundry_trust_self_signed_certs:
     description:
-      Required SSL by default (using tomcat x-forwarded-for and x-forwarded-proto) on sandbox-service route
+      should accept selfsigned cloudfoundry certificates
     default: false 
 
   elpaaso_sandbox_service.security_enable_csrf:
