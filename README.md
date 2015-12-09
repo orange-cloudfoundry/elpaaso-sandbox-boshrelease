@@ -1,5 +1,20 @@
 # BOSH Release for elpaaso-sandbox
 
+This is a Bosh Release, to help deploy the elpaaso sandbox components
+* a UI component
+* a Service Component
+
+This release must be deployed with the route registrar release, to expose the 2 jars servers as cloudfoundry routes. 
+
+
+## Prerequisites
+
+* a dedicated org to hold sandbox spaces
+* a default space in this org
+* a sandbox admin user, with org admin right
+* a UAA Oauth2 client id / and secret, configured in cloudfoundry
+
+
 ## Usage
 
 To use this bosh release, first upload it to your bosh:
@@ -11,19 +26,92 @@ cd elpaaso-sandbox-boshrelease
 bosh upload release releases/elpaaso-sandbox-1.yml
 ```
 
-For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster:
+Prepare a manifest
+
+``` yaml
+---
+
+...
+
+releases:
+  - {name: elpaaso-sandbox, version: latest}
+  - {name: route-registrar, version: latest}
+
+..
+
+jobs:
+
+  - name: elpaaso-sandbox-service
+    templates:
+      - {release: elpaaso-sandbox, name: elpaaso-sandbox-service}
+      - {name: route-registrar, release: route-registrar}
+
+    instances: 1
+...
+    properties:
+      elpaaso_sandbox_service:
+        security_require_ssl: false
+        elpaaso_sandbox_service.security_enable_csrf: true
+        cloudfoundry_trust_self_signed_certs: true
+        cloudfoundry_api_url: https://api.cloudfoundry.net.net
+        cloudfoundry_credentials_user_id: <sandbox-user>
+        cloudfoundry_credentials_password: <sandbox password>
+        cloudfoundry_org: <sandbox org>
+        cloudfoundry_space: <sandbox default-space>
+        oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxxx -----END PUBLIC KEY-----
+        security_oauth2_admin_scope: cloudcontroller.admin
+
+      # this is a route to expose sandbox service via cf routers
+      route_registrar:
+        external_host: elpaaso-sandbox-service.cloudfoundry.net.net
+        external_ip: 10.0.0.10 #<-- static ip of the job
+        port: 8081  #<-- default for service
+        message_bus_servers:
+        - host:  <nats ip>:4222  # cf nats ip
+          user: nats
+          password: yyyyyy  #nats password
+        health_checker:
+          interval: 10
+          name: healthchk
+
+
+  - name: elpaaso-sandbox-ui
+    templates:
+      - {release: elpaaso-sandbox, name: elpaaso-sandbox-ui}
+      - {name: route-registrar, release: route-registrar}
+      - {release: logsearch-shipper, name: logsearch-shipper}
+
+
+    properties:
+
+      # ui properties
+      elpaaso_sandbox_ui:
+        admin_password: zzz
+        enable_ssl_certificate_check: false
+        sandbox_service_url: http://elpaaso-sandbox-service.cloudfoundry.net.net
+        login_url: https://login.cloudfoundry.net.net
+        oauth2_client_client_id: o-elpaaso-sandbox                                      #<-- must match UAA Oauth2 client 
+        oauth2_client_client_secret: UAA-ELPAASO-SANDBOX-SECRET                         #<-- must match UAA Oauth2 client
+        oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxx -----END PUBLIC KEY---- #<-- must match UAA Oauth2 client
+
+
+
+       # this is a route to expose sandbox ui via cf routers
+      route_registrar:
+        external_host: elpaaso-sandbox-ui.cloudfoundry.net.net
+        external_ip: 10.0.0.11  #<-- static ip of the job
+        port: 8080  # <-- spring boot default for ui
+        message_bus_servers:
+        - host:  <nats ip>:4222  # cf nats ip
+          user: nats
+          password: yyyyyy  #nats password
+        health_checker:
+          interval: 10
+          name: healthchk
 
 ```
-templates/make_manifest warden
-bosh -n deploy
-```
 
-For AWS EC2, create a single VM:
 
-```
-templates/make_manifest aws-ec2
-bosh -n deploy
-```
 
 ### Override security groups
 

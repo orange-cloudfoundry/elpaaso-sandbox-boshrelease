@@ -16,31 +16,29 @@ packages:
 - elpaaso-sandbox-ui
 
 properties:
-  elpaaso_sandbox_ui.xxx:
-    description:
-      xxxxxx
-    default: 1200
 
   elpaaso_sandbox_ui.admin_password:
     description:
-      xxxxxx
+      Basic Auth actuator enpoint protection
+      You should override admin_password (default: sandbox-admin)
+      
   elpaaso_sandbox_ui.enable_ssl_certificate_check:
     description:
-      xxxxxx
+      Allow to disable SSL certificate check. SHOULD NOT BE disabled !!!
     default: false
   elpaaso_sandbox_ui.sandbox_service_url:
     description:
-      xxxxxx
+      Sandbox service url - Required Parameter
   elpaaso_sandbox_ui.login_url:
     description:
-      xxxxxx
+      Login url, used for access token and - Required Parameter
   elpaaso_sandbox_ui.oauth2_client_client_id:
     description:
-      xxxxxx
+       OAuth2 connection info
   elpaaso_sandbox_ui.oauth2_client_client_secret:
     description:
-      xxxxxx
+       OAuth2 connection info
   elpaaso_sandbox_ui.oauth2_resource_jwt_key:
     description:
-      xxxxxx
+       OAuth2 connection info
 
