@@ -13,6 +13,22 @@ This release must be deployed with the route registrar release, to expose the 2 
 * a default space in this org
 * a sandbox admin user, with org admin right
 * a UAA Oauth2 client id / and secret, configured in cloudfoundry
+see the following cloudfoundry manifest snippet
+
+``` yaml
+---
+
+...
+uaa:
+...
+    clients:
+...
+      o-elpaaso-sandbox:
+        secret: UAA-ELPAASO-SANDBOX-SECRET-ristiakDargonkorIa
+        redirect-uri: http://elpaaso-sandbox-ui.cfy-api.preprod.paascfy.s0.p.fti.net
+        scope: openid,cloud_controller.read
+...
+```
 
 
 ## Usage
@@ -53,17 +69,17 @@ jobs:
         security_require_ssl: false
         elpaaso_sandbox_service.security_enable_csrf: true
         cloudfoundry_trust_self_signed_certs: true
-        cloudfoundry_api_url: https://api.cloudfoundry.net.net
+        cloudfoundry_api_url: https://api.cloudfoundry.net
         cloudfoundry_credentials_user_id: <sandbox-user>
         cloudfoundry_credentials_password: <sandbox password>
         cloudfoundry_org: <sandbox org>
         cloudfoundry_space: <sandbox default-space>
-        oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxxx -----END PUBLIC KEY-----
+        oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxxx -----END PUBLIC KEY-----  #<-- must match UAA Oauth2 client
         security_oauth2_admin_scope: cloudcontroller.admin
 
       # this is a route to expose sandbox service via cf routers
       route_registrar:
-        external_host: elpaaso-sandbox-service.cloudfoundry.net.net
+        external_host: elpaaso-sandbox-service.cloudfoundry.net
         external_ip: 10.0.0.10 #<-- static ip of the job
         port: 8081  #<-- default for service
         message_bus_servers:
@@ -88,8 +104,8 @@ jobs:
       elpaaso_sandbox_ui:
         admin_password: zzz
         enable_ssl_certificate_check: false
-        sandbox_service_url: http://elpaaso-sandbox-service.cloudfoundry.net.net
-        login_url: https://login.cloudfoundry.net.net
+        sandbox_service_url: http://elpaaso-sandbox-service.cloudfoundry.net
+        login_url: https://login.cloudfoundry.net
         oauth2_client_client_id: o-elpaaso-sandbox                                      #<-- must match UAA Oauth2 client 
         oauth2_client_client_secret: UAA-ELPAASO-SANDBOX-SECRET                         #<-- must match UAA Oauth2 client
         oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxx -----END PUBLIC KEY---- #<-- must match UAA Oauth2 client
@@ -98,7 +114,7 @@ jobs:
 
        # this is a route to expose sandbox ui via cf routers
       route_registrar:
-        external_host: elpaaso-sandbox-ui.cloudfoundry.net.net
+        external_host: elpaaso-sandbox-ui.cloudfoundry.net
         external_ip: 10.0.0.11  #<-- static ip of the job
         port: 8080  # <-- spring boot default for ui
         message_bus_servers:
