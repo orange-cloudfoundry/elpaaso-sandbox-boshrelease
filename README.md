@@ -1,10 +1,11 @@
 # BOSH Release for elpaaso-sandbox
 
-This is a Bosh Release, to help deploy the elpaaso sandbox components
-* a UI component
-* a Service Component
+This is a Bosh Release, to help deploy the elpaaso sandbox components, based on [bosh-gen tool] (https://github.com/cloudfoundry-community/bosh-gen)
+* a UI component - [elpaaso-sandbox-ui](https://github.com/Orange-OpenSource/elpaaso-sandbox-ui)
+* a Service Component - [elpaaso-sandbox-service](https://github.com/Orange-OpenSource/elpaaso-sandbox-service)
 
-This release must be deployed with the route registrar release, to expose the 2 jars servers as cloudfoundry routes. 
+This release must be deployed with the [route registrar release] (https://github.com/cloudfoundry-community/route-registrar-boshrelease), to expose the 2 Spring boot jars servers as cloudfoundry routes.
+ 
 
 
 ## Prerequisites
@@ -24,11 +25,12 @@ uaa:
     clients:
 ...
       o-elpaaso-sandbox:
-        secret: UAA-ELPAASO-SANDBOX-SECRET-ristiakDargonkorIa
-        redirect-uri: http://elpaaso-sandbox-ui.cfy-api.preprod.paascfy.s0.p.fti.net
+        secret: UAA-ELPAASO-SANDBOX-SECRET
+        redirect-uri: http://elpaaso-sandbox-ui.cloudfoundry.net
         scope: openid,cloud_controller.read
 ...
 ```
+
 
 
 ## Usage
@@ -95,9 +97,7 @@ jobs:
     templates:
       - {release: elpaaso-sandbox, name: elpaaso-sandbox-ui}
       - {name: route-registrar, release: route-registrar}
-      - {release: logsearch-shipper, name: logsearch-shipper}
-
-
+...
     properties:
 
       # ui properties
@@ -109,8 +109,6 @@ jobs:
         oauth2_client_client_id: o-elpaaso-sandbox                                      #<-- must match UAA Oauth2 client 
         oauth2_client_client_secret: UAA-ELPAASO-SANDBOX-SECRET                         #<-- must match UAA Oauth2 client
         oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxx -----END PUBLIC KEY---- #<-- must match UAA Oauth2 client
-
-
 
        # this is a route to expose sandbox ui via cf routers
       route_registrar:
