@@ -31,7 +31,7 @@ uaa:
 ...
 ```
 
-
+Once UAA updated, you can [retrieve the UAA public key for JWT] (https://github.com/Orange-OpenSource/elpaaso-sandbox-service#getting-uaa-public-key-to-validate-jwt-signature)for your manifest
 
 ## Usage
 
@@ -44,7 +44,7 @@ cd elpaaso-sandbox-boshrelease
 bosh upload release releases/elpaaso-sandbox-1.yml
 ```
 
-Prepare a manifest
+Prepare a manifest with 2 midsized job, no persistent disk required
 
 ``` yaml
 ---
