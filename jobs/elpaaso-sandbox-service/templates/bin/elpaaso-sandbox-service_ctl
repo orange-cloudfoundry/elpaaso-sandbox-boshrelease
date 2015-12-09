@@ -20,14 +20,14 @@ case $1 in
     echo $$ > $PIDFILE
     
     
-	export CLOUDFOUNDRY_TRUST_SELF_SIGNED_CERTS: <%= p('elpaaso_sandbox_service.cloudfoundry_trust_self_signed_certs') %>
+	export CLOUDFOUNDRY_TRUST_SELF_SIGNED_CERTS=<%= p('elpaaso_sandbox_service.cloudfoundry_trust_self_signed_certs') %>
 	export CLOUDFOUNDRY_API_URL=<%= p('elpaaso_sandbox_service.cloudfoundry_api_url') %>
 	export CLOUDFOUNDRY_CREDENTIALS_USER_ID=<%= p('elpaaso_sandbox_service.cloudfoundry_credentials_user_id') %>
 	export CLOUDFOUNDRY_CREDENTIALS_PASSWORD=<%= p('elpaaso_sandbox_service.cloudfoundry_credentials_password') %>
 	export CLOUDFOUNDRY_ORG=<%= p('elpaaso_sandbox_service.cloudfoundry_org') %>
 	export CLOUDFOUNDRY_ORG=<%= p('elpaaso_sandbox_service.cloudfoundry_space') %> 
 	export SECURITY_REQUIRE_SSL=<%= p('elpaaso_sandbox_service.security_require_ssl') %>
-	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE='<%= p('elpaaso_sandbox_service.oauth2_resource_jwt_key').gsub('\\n', "\\\n") %>'
+	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE="<%= p('elpaaso_sandbox_service.oauth2_resource_jwt_key').gsub('\\n', "\\\n") %>"
 
     exec chpst -u vcap:vcap $JAVA_HOME/bin/java -jar /var/vcap/packages/elpaaso-sandbox-service/elpaaso-sandbox-service.jar \
          >>$LOG_DIR/$JOB_NAME.stdout.log \
