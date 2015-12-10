@@ -13,6 +13,18 @@ This release must be deployed with the [route registrar release] (https://github
 * a dedicated org to hold sandbox spaces
 * a default space in this org
 * a sandbox admin user, with org admin right
+
+``` yaml
+cf create-space -o $sandbox_org default-space
+
+cf set-org-role $username $sandbox_org OrgManager
+cf set-space-role $username $sandbox_org default-space SpaceDeveloper
+cf set-space-role $username $sandbox_org default-space SpaceManager
+```
+
+
+
+
 * a UAA Oauth2 client id / and secret, configured in cloudfoundry
 see the following cloudfoundry manifest snippet
 
@@ -125,6 +137,10 @@ jobs:
 
 ```
 
+### Common pitfalls and errors
+
+* Login successfull, error "Authorization Request Error. There was an error. The request for authorization was invalid."
+	* check UAA Client redirect-uri (eg: https, not http)
 
 
 ### Override security groups
