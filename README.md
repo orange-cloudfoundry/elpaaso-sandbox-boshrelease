@@ -26,7 +26,7 @@ uaa:
 ...
       o-elpaaso-sandbox:
         secret: UAA-ELPAASO-SANDBOX-SECRET
-        redirect-uri: http://elpaaso-sandbox-ui.cloudfoundry.net
+        redirect-uri: https://elpaaso-sandbox-ui.cloudfoundry.net
         scope: openid,cloud_controller.read
 ...
 ```
