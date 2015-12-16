@@ -19,7 +19,7 @@ properties:
   elpaaso_sandbox_ui.admin_password:
     description:
       Basic Auth actuator enpoint protection
-      You should override admin_password (default: sandbox-admin)
+      You should override admin_password 
       
   elpaaso_sandbox_ui.enable_ssl_certificate_check:
     description:
