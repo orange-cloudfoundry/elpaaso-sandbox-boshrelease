@@ -7,7 +7,6 @@ templates:
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
-  application.yml.erb: application.yml
   logback.xml.erb: logback.xml
   
   
@@ -80,6 +79,16 @@ properties:
     description:
       scope required to allow access to sensitive spring actuator endpoint
     default: cloudcontroller.admin
+    
+    
+  elpaaso_sandbox_service.trusted_certificate_ca:
+    description:
+      Trusted Self-Signed Root CA Certificate to be added to JVM truststore
+    
+    
+    
+    
+
 
     
     

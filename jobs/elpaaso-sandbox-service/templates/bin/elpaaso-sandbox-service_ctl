@@ -28,6 +28,10 @@ case $1 in
 	export CLOUDFOUNDRY_ORG=<%= p('elpaaso_sandbox_service.cloudfoundry_space') %> 
 	export SECURITY_REQUIRE_SSL=<%= p('elpaaso_sandbox_service.security_require_ssl') %>
 	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE="<%= p('elpaaso_sandbox_service.oauth2_resource_jwt_key').gsub('\\n', "\\\n") %>"
+	
+	export TRUSTED_CA_CERTIFICATE="<%= p('elpaaso_sandbox_service.trusted_certificate_ca').gsub('\\n', "\\\n") %>" 
+	
+	
 
     exec chpst -u vcap:vcap $JAVA_HOME/bin/java -jar /var/vcap/packages/elpaaso-sandbox-service/elpaaso-sandbox-service.jar \
          >>$LOG_DIR/$JOB_NAME.stdout.log \

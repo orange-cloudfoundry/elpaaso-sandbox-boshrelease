@@ -27,6 +27,7 @@ case $1 in
 	export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=<%= p('elpaaso_sandbox_ui.oauth2_client_client_secret')  %> 
 	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE="<%= p('elpaaso_sandbox_ui.oauth2_resource_jwt_key').gsub('\\n', "\\\n")  %>"
 
+	export TRUSTED_CA_CERTIFICATE="<%= p('elpaaso_sandbox_ui.trusted_certificate_ca').gsub('\\n', "\\\n") %>"
 
     exec chpst -u vcap:vcap $JAVA_HOME/bin/java -jar /var/vcap/packages/elpaaso-sandbox-ui/elpaaso-sandbox-ui.jar \
          >>$LOG_DIR/$JOB_NAME.stdout.log \

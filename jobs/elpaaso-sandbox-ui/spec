@@ -7,7 +7,6 @@ templates:
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
-  application.yml.erb: application.yml
   logback.xml.erb: logback.xml
 
 packages:
@@ -41,4 +40,8 @@ properties:
   elpaaso_sandbox_ui.oauth2_resource_jwt_key:
     description:
        OAuth2 connection info
+
+  elpaaso_sandbox_ui.trusted_certificate_ca:
+    description:
+      Trusted Self-Signed Root CA Certificate to be added to JVM truststore
 
