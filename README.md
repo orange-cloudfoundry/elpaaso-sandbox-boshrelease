@@ -80,7 +80,7 @@ jobs:
 ...
     properties:
       elpaaso_sandbox_service:
-        security_require_ssl: false
+        security_require_ssl: true
         elpaaso_sandbox_service.security_enable_csrf: true
         cloudfoundry_trust_self_signed_certs: true
         cloudfoundry_api_url: https://api.cloudfoundry.net
@@ -90,6 +90,7 @@ jobs:
         cloudfoundry_space: <sandbox default-space>
         oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxxx -----END PUBLIC KEY-----  #<-- must match UAA Oauth2 client
         security_oauth2_admin_scope: cloudcontroller.admin
+        trusted_certificate_ca: ""  #<-- set cert pem, for custom corporate certificates ("" otherwise)
 
       # this is a route to expose sandbox service via cf routers
       route_registrar:
@@ -115,12 +116,13 @@ jobs:
       # ui properties
       elpaaso_sandbox_ui:
         admin_password: zzz
-        enable_ssl_certificate_check: false
+        enable_ssl_certificate_check: true
         sandbox_service_url: http://elpaaso-sandbox-service.cloudfoundry.net
         login_url: https://login.cloudfoundry.net
         oauth2_client_client_id: o-elpaaso-sandbox                                      #<-- must match UAA Oauth2 client 
         oauth2_client_client_secret: UAA-ELPAASO-SANDBOX-SECRET                         #<-- must match UAA Oauth2 client
         oauth2_resource_jwt_key: -----BEGIN PUBLIC KEY----- xxx -----END PUBLIC KEY---- #<-- must match UAA Oauth2 client
+        trusted_certificate_ca: ""  #<-- set cert pem, for custom corporate certificates ("" otherwise)        
 
        # this is a route to expose sandbox ui via cf routers
       route_registrar:
