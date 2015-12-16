@@ -25,7 +25,7 @@ case $1 in
 	export CLOUDFOUNDRY_CREDENTIALS_USER_ID=<%= p('elpaaso_sandbox_service.cloudfoundry_credentials_user_id') %>
 	export CLOUDFOUNDRY_CREDENTIALS_PASSWORD=<%= p('elpaaso_sandbox_service.cloudfoundry_credentials_password') %>
 	export CLOUDFOUNDRY_ORG=<%= p('elpaaso_sandbox_service.cloudfoundry_org') %>
-	export CLOUDFOUNDRY_ORG=<%= p('elpaaso_sandbox_service.cloudfoundry_space') %> 
+	export CLOUDFOUNDRY_SPACE=<%= p('elpaaso_sandbox_service.cloudfoundry_space') %> 
 	export SECURITY_REQUIRE_SSL=<%= p('elpaaso_sandbox_service.security_require_ssl') %>
 	export SECURITY_OAUTH2_RESOURCE_JWT_KEY_VALUE="<%= p('elpaaso_sandbox_service.oauth2_resource_jwt_key').gsub('\\n', "\\\n") %>"
 	
