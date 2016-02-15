@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+---
 #
 # Copyright (C) 2015 Orange
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,15 @@
 # limitations under the License.
 #
 
-set -e
-OUTPUT="$PWD/bosh-candidate-release"
-VERSION="$(cat bosh-version/number)"
+platform: linux
+image: docker:///concourse#concourse-ci
 
-echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"
+inputs:
+- name: elpaaso-sandbox-boshrelease
 
-pushd elpaaso-sandbox-boshrelease
-echo "DEBUG - pwd: $PWD"
+run:
+  path: elpaaso-sandbox-boshrelease/ci/deploy.sh
 
-  echo "Updating submodule"
-  ./update.sh
-
-  echo "Creating bosh release"
-  bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
-
-  echo "Moving to OUTPUT"
-  mv dev_releases/elpaaso-sandbox-boshrelease/elpaaso-sandbox-boshrelease-*.tgz "$OUTPUT"
-popd
+params:
+  BINTRAY_USER:
+  BINTRAY_PASSWORD:

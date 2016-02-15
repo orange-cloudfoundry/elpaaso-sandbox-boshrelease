@@ -13,20 +13,7 @@
 #
 
 set -e
-OUTPUT="$PWD/bosh-candidate-release"
-VERSION="$(cat bosh-version/number)"
-
-echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"
 
 pushd elpaaso-sandbox-boshrelease
-echo "DEBUG - pwd: $PWD"
-
-  echo "Updating submodule"
-  ./update.sh
-
-  echo "Creating bosh release"
-  bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
-
-  echo "Moving to OUTPUT"
-  mv dev_releases/elpaaso-sandbox-boshrelease/elpaaso-sandbox-boshrelease-*.tgz "$OUTPUT"
+  du -a
 popd
