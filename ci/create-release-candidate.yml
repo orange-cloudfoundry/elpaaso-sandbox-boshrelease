@@ -21,9 +21,9 @@ image_resource:
 inputs:
 - name: elpaaso-sandbox-boshrelease
 - name: elpaaso-sandbox-service
-  path: elpaaso-sandbox-boshrelease/src/elpaaso-sandbox-service
+#  path: elpaaso-sandbox-boshrelease/src/elpaaso-sandbox-service
 - name: elpaaso-sandbox-ui
-  path: elpaaso-sandbox-boshrelease/src/elpaaso-sandbox-ui
+#  path: elpaaso-sandbox-boshrelease/src/elpaaso-sandbox-ui
 - name: bosh-version
 
 outputs:
