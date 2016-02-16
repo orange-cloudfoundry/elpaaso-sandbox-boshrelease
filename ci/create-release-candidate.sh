@@ -58,7 +58,7 @@ pushd elpaaso-sandbox-boshrelease
 #  echo "Updating submodule"
 #  ./update
   echo "Committing submodule update"
-  git commit -m "Updading submodule SANDBOX_UI_COMMIT to $SANDBOX_UI_COMMIT and SANDBOX_SERVICE_COMMIT to $SANDBOX_SERVICE_COMMIT"
+  git commit -a -m "Updading submodule SANDBOX_UI_COMMIT to $SANDBOX_UI_COMMIT and SANDBOX_SERVICE_COMMIT to $SANDBOX_SERVICE_COMMIT"
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
