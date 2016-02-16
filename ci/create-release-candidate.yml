@@ -27,7 +27,7 @@ inputs:
 - name: bosh-version
 
 outputs:
-- name: bosh-candidate-release
+- name: bosh-release-candidate
 
 run:
   path: elpaaso-sandbox-boshrelease/ci/create-release-candidate.sh
