@@ -28,6 +28,11 @@ pushd elpaaso-sandbox-ui
 popd
 
 pushd elpaaso-sandbox-boshrelease
+  git config user.name "$GH_USER"
+  git config user.email "$GH_USER_EMAIL"
+  git config credential.helper "store --file=.git/credentials"
+  echo "https://$GH_TOKEN:@github.com" > .git/credentials
+  git config --global push.default simple
 
   echo "Create release candidate branch"
   git checkout -b release-candidate/$VERSION
