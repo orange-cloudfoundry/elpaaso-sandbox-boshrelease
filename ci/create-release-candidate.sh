@@ -27,6 +27,6 @@ echo "DEBUG - pwd: $PWD"
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
 
-  echo "Moving to OUTPUT"
+  echo "Moving to $OUTPUT"
   mv dev_releases/elpaaso-sandbox-boshrelease/elpaaso-sandbox-boshrelease-*.tgz "$OUTPUT"
 popd
