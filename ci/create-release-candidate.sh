@@ -54,9 +54,9 @@ echo "DEBUG - pwd: $PWD"
     git merge --commit HEAD $SANDBOX_UI_COMMIT
   popd
 
+  git status
 #  echo "Updating submodule"
 #  ./update
-  cd
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
