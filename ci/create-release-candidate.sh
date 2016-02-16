@@ -21,11 +21,8 @@ echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"
 pushd elpaaso-sandbox-boshrelease
 echo "DEBUG - pwd: $PWD"
 
-  du -a
-  ls -l
-
   echo "Updating submodule"
-  ./update.sh
+  ./update
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
