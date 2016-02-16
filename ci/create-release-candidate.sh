@@ -16,13 +16,47 @@ set -e
 OUTPUT="$PWD/bosh-release-candidate"
 VERSION="$(cat bosh-version/number)"
 
+
+function get_lastest_commit() {
+  $(git log -n 1 --pretty=format:"%H")
+}
+
 echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"
+
+pushd elpaaso-sandbox-service
+    SANDBOX_SERVICE_COMMIT=$(git log -n 1 --pretty=format:"%H")
+popd
+
+pushd elpaaso-sandbox-ui
+    SANDBOX_UI_COMMIT=$(git log -n 1 --pretty=format:"%H")
+popd
 
 pushd elpaaso-sandbox-boshrelease
 echo "DEBUG - pwd: $PWD"
 
+  echo "Create release candidate branch"
+  git checkout -b release-candidate/$VERSION
+
+  git status
+
+  echo "Getting submodule status"
+  git submodule status
+
+  echo "Getting elpaaso-sandbox-service commit"
+  pushd src/elpaaso-sandbox-service
+    git fetch
+    git merge --commit HEAD $SANDBOX_SERVICE_COMMIT
+  popd
+
+  echo "Getting elpaaso-sandbox-ui commit"
+  pushd src/elpaaso-sandbox-ui
+    git fetch
+    git merge --commit HEAD $SANDBOX_UI_COMMIT
+  popd
+
 #  echo "Updating submodule"
 #  ./update
+  cd
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
