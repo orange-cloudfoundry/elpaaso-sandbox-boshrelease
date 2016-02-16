@@ -17,10 +17,6 @@ OUTPUT="$PWD/bosh-release-candidate"
 VERSION="$(cat bosh-version/number)"
 
 
-function get_lastest_commit() {
-  $(git log -n 1 --pretty=format:"%H")
-}
-
 echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"
 
 pushd elpaaso-sandbox-service
@@ -32,7 +28,6 @@ pushd elpaaso-sandbox-ui
 popd
 
 pushd elpaaso-sandbox-boshrelease
-echo "DEBUG - pwd: $PWD"
 
   echo "Create release candidate branch"
   git checkout -b release-candidate/$VERSION
@@ -57,6 +52,8 @@ echo "DEBUG - pwd: $PWD"
   git status
 #  echo "Updating submodule"
 #  ./update
+  echo "Committing submodule update"
+  git commit -m "Updading submodule SANDBOX_UI_COMMIT to $SANDBOX_UI_COMMIT and SANDBOX_SERVICE_COMMIT to $SANDBOX_SERVICE_COMMIT"
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
