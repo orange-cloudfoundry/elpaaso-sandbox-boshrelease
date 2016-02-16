@@ -14,7 +14,7 @@
 
 set -e
 OUTPUT="$PWD/bosh-release-candidate"
-VERSION="$(cat bosh-version/number)"
+VERSION="$(cat boshrelease-version/number)"
 
 
 echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"

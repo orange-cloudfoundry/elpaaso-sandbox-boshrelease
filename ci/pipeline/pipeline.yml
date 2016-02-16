@@ -1,0 +1,148 @@
+---
+#
+# Copyright (C) 2015 Orange
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+resources:
+- name: elpaaso-starter-parent
+  type: git
+  source:
+    uri: https://github.com/Orange-OpenSource/elpaaso-starter-parent
+
+- name: elpaaso-sandbox-service
+  type: git
+  source:
+    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-service
+    branch: concourse
+
+- name: elpaaso-sandbox-ui
+  type: git
+  source:
+    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-ui
+    branch: concourse
+
+- name: elpaaso-sandbox-boshrelease
+  type: git
+  source:
+    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-boshrelease.git
+    branch: concourse
+
+- name: boshrelease-version
+  type: semver
+  source:
+    bucket: {{aws-sandbox-candidate-bucket}}
+    key: current-version
+    initial_version: 1.0.0
+    access_key_id: {{aws-access-key-id}}
+    secret_access_key: {{aws-secret-access-key}}
+    region_name: {{aws-sandbox-region}}
+
+
+- name: bosh-final-release
+  type: s3
+  source:
+    bucket: {{aws-sandbox-bucket}}
+    regexp: elpaaso-sandbox-boshrelease-(.*).tgz
+    access_key_id: {{aws-access-key-id}}
+    secret_access_key: {{aws-secret-access-key}}
+    region_name: {{aws-sandbox-region}}
+
+- name: bosh-release-candidate
+  type: s3
+  source:
+    bucket: {{aws-sandbox-candidate-bucket}}
+    regexp: elpaaso-sandbox-boshrelease-(.*).tgz
+    access_key_id: {{aws-access-key-id}}
+    secret_access_key: {{aws-secret-access-key}}
+    region_name: {{aws-sandbox-region}}
+
+jobs:
+- name: jobs-elpaaso-starter-parent
+  public: true
+  plan:
+  - get: elpaaso-starter-parent
+    trigger: true
+  - task: unit-test
+    #file: elpaaso-sandbox-ui/ci/unit-test.yml
+    config:
+      platform: linux
+      image: docker:///java#8-jdk
+
+      inputs:
+       - name: elpaaso-starter-parent
+
+      run:
+        path: ls
+        args: [-lrt]
+
+- name: jobs-elpaaso-sandbox-service
+  public: true
+  plan:
+  - aggregate:
+    - get: elpaaso-starter-parent
+      trigger: true
+      passed: [jobs-elpaaso-starter-parent]
+    - get: elpaaso-sandbox-service
+      trigger: true
+  - task: unit-test
+    file: elpaaso-sandbox-service/ci/unit-test.yml
+  - task: deploy
+    file: elpaaso-sandbox-service/ci/deploy.yml
+    config:
+      params:
+        BINTRAY_USER: {{bintray_username}}
+        BINTRAY_PASSWORD: {{bintray_password}}
+
+- name: jobs-elpaaso-sandbox-ui
+  public: true
+  plan:
+  - aggregate:
+    - get: elpaaso-starter-parent
+      trigger: true
+      passed: [jobs-elpaaso-starter-parent]
+    - get: elpaaso-sandbox-ui
+      trigger: true
+  - task: unit-test
+    file: elpaaso-sandbox-ui/ci/unit-test.yml
+  - task: deploy
+    file: elpaaso-sandbox-ui/ci/deploy.yml
+    config:
+      params:
+        BINTRAY_USER: {{bintray_username}}
+        BINTRAY_PASSWORD: {{bintray_password}}
+
+- name: jobs-elpaaso-sandbox-boshrelease
+  public: true
+  plan:
+  - aggregate:
+    - get: elpaaso-sandbox-service
+      trigger: true
+      passed: [jobs-elpaaso-sandbox-service]
+    - get: elpaaso-sandbox-ui
+      trigger: true
+      passed: [jobs-elpaaso-sandbox-ui]
+    - get: elpaaso-sandbox-boshrelease
+      trigger: true
+    - get: boshrelease-version
+      params: {pre: rc}
+  - task: create-release-candidate
+    file: elpaaso-sandbox-boshrelease/ci/create-release-candidate.yml
+    config:
+      params:
+        GH_USER: {{github-username}}
+        GH_USER_EMAIL: {{github-email}}
+        GH_TOKEN: {{github-token}}
+  - put: bosh-release-candidate
+    params: {file: bosh-release-candidate/elpaaso-sandbox-boshrelease-*.tgz}
+  - put: boshrelease-version
+    params: {pre: rc}
+

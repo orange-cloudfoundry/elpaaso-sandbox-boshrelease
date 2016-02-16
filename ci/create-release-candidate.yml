@@ -22,7 +22,7 @@ inputs:
 - name: elpaaso-sandbox-boshrelease
 - name: elpaaso-sandbox-service
 - name: elpaaso-sandbox-ui
-- name: bosh-version
+- name: boshrelease-version
 
 outputs:
 - name: bosh-release-candidate
