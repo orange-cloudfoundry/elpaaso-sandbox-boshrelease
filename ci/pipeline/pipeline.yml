@@ -16,25 +16,33 @@ resources:
 - name: elpaaso-starter-parent
   type: git
   source:
-    uri: https://github.com/Orange-OpenSource/elpaaso-starter-parent
+    uri: {{elpaaso-starter-parent-git-url}}
+    branch: {{elpaaso-starter-parent-git-branch}}
 
 - name: elpaaso-sandbox-service
   type: git
   source:
-    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-service
-    branch: concourse
+    uri: {{elpaaso-sandbox-service-git-url}}
+    branch: {{elpaaso-sandbox-service-git-branch}}
 
 - name: elpaaso-sandbox-ui
   type: git
   source:
-    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-ui
-    branch: concourse
+    uri: {{elpaaso-sandbox-ui-git-url}}
+    branch: {{elpaaso-sandbox-ui-git-branch}}
 
 - name: elpaaso-sandbox-boshrelease
   type: git
   source:
-    uri: https://github.com/Orange-OpenSource/elpaaso-sandbox-boshrelease.git
-    branch: concourse
+    uri: {{elpaaso-sandbox-boshrelease-git-url}}
+    branch: {{elpaaso-sandbox-boshrelease-git-branch}}
+
+- name: elpaaso-sandbox-boshrelease-release-candidate
+  type: git
+  source:
+    uri: {{elpaaso-sandbox-boshrelease-git-url}}
+    branch: {{elpaaso-sandbox-boshrelease-git-branch}}
+
 
 - name: boshrelease-version
   type: semver
@@ -65,6 +73,32 @@ resources:
     secret_access_key: {{aws-secret-access-key}}
     region_name: {{aws-sandbox-region}}
 
+- name: sandbox-deployment
+  type: bosh-deployment
+  source:
+    target: {{bosh-deployment-target}}
+    username: {{bosh-deployment-user}}
+    password: {{bosh-deployment-password}}
+    deployment: elpaaso-sandbox-ci
+    ignore_ssl: true
+
+- name: resource-bosh-stemcell
+  type: bosh-io-stemcell
+  source:
+    name: {{bosh-stemcell-name}}
+
+- name: resource-manifests
+  type: git
+  source:
+    uri: {{resource-manifests-uri}}
+    skip_ssl_verification: {{resource-manifests-skip-ssl-verification}}
+    paths: [deployments/elpaaso-sandbox-ci/]
+
+- name: route-registrar-boshrelease
+  type: bosh-io-release
+  source:
+    repository: cloudfoundry-community/route-registrar-boshrelease
+
 jobs:
 - name: jobs-elpaaso-starter-parent
   public: true
@@ -85,7 +119,6 @@ jobs:
         args: [-lrt]
 
 - name: jobs-elpaaso-sandbox-service
-  public: true
   plan:
   - aggregate:
     - get: elpaaso-starter-parent
@@ -103,7 +136,6 @@ jobs:
         BINTRAY_PASSWORD: {{bintray_password}}
 
 - name: jobs-elpaaso-sandbox-ui
-  public: true
   plan:
   - aggregate:
     - get: elpaaso-starter-parent
@@ -121,7 +153,6 @@ jobs:
         BINTRAY_PASSWORD: {{bintray_password}}
 
 - name: jobs-elpaaso-sandbox-boshrelease
-  public: true
   plan:
   - aggregate:
     - get: elpaaso-sandbox-service
@@ -146,3 +177,61 @@ jobs:
   - put: boshrelease-version
     params: {pre: rc}
 
+- name: jobs-elpaaso-sandbox-boshrelease-deploy
+  plan:
+  - aggregate:
+    - get: bosh-release-candidate
+      passed: [jobs-elpaaso-sandbox-boshrelease]
+      trigger: true
+      attempts: 3
+    - get: route-registrar-boshrelease
+      trigger: true
+      attempts: 3
+    - get: resource-manifests
+      trigger: true
+      params: { submodules: none}
+      attempts: 3
+  - put: sandbox-deployment
+    params:
+      manifest: resource-manifests/deployments/elpaaso-sandbox-ci/elpaaso-sandbox-ci.yml
+      releases:
+      - bosh-release-candidate/*.tgz
+      - route-registrar-boshrelease/*tgz
+      stemcells: []
+      # - resource-bosh-stemcell/*.tgz
+    attempts: 10
+
+#- name: elpaaso-sandbox-boshrelease-acceptance-test
+#  plan:
+#  - aggregate:
+#    - get: bosh-release-candidate
+#      passed: [jobs-elpaaso-sandbox-boshrelease-deploy]
+#      trigger: true
+
+- name: promote-elpaaso-sandbox-boshrelease
+  plan:
+  - aggregate:
+    - get: bosh-release-candidate
+#      passed: [jobs-elpaaso-sandbox-boshrelease-deploy, elpaaso-sandbox-boshrelease-acceptance-test]
+      passed: [jobs-elpaaso-sandbox-boshrelease-deploy]
+
+- name: jobs-elpaaso-sandbox-boshrelease-final
+  plan:
+  - aggregate:
+    - get: bosh-release-candidate
+      passed: [promote-elpaaso-sandbox-boshrelease]
+      trigger: true
+    - get: elpaaso-sandbox-boshrelease
+      passed: [jobs-elpaaso-sandbox-boshrelease]
+    - get: boshrelease-version
+
+
+
+- name: NEW-major
+  plan:
+  - put: boshrelease-version
+    params: {bump: major, pre: rc}
+- name: NEW-minor
+  plan:
+  - put: boshrelease-version
+    params: {bump: minor, pre: rc}
