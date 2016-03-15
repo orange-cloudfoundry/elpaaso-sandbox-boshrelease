@@ -16,32 +16,32 @@ resources:
 - name: elpaaso-starter-parent
   type: git
   source:
-    uri: {{elpaaso-starter-parent-git-url}}
-    branch: {{elpaaso-starter-parent-git-branch}}
+    uri: {{starter-parent-git-url}}
+    branch: {{starter-parent-git-branch}}
 
 - name: elpaaso-sandbox-service
   type: git
   source:
-    uri: {{elpaaso-sandbox-service-git-url}}
-    branch: {{elpaaso-sandbox-service-git-branch}}
+    uri: {{sandbox-service-git-url}}
+    branch: {{sandbox-service-git-branch}}
 
 - name: elpaaso-sandbox-ui
   type: git
   source:
-    uri: {{elpaaso-sandbox-ui-git-url}}
-    branch: {{elpaaso-sandbox-ui-git-branch}}
+    uri: {{sandbox-ui-git-url}}
+    branch: {{sandbox-ui-git-branch}}
 
 - name: elpaaso-sandbox-boshrelease
   type: git
   source:
-    uri: {{elpaaso-sandbox-boshrelease-git-url}}
-    branch: {{elpaaso-sandbox-boshrelease-git-branch}}
+    uri: {{sandbox-boshrelease-git-url}}
+    branch: {{sandbox-boshrelease-git-branch}}
 
-- name: elpaaso-sandbox-boshrelease-release-candidate
+- name: sandbox-boshrelease-master
   type: git
   source:
-    uri: {{elpaaso-sandbox-boshrelease-git-url}}
-    branch: {{elpaaso-sandbox-boshrelease-git-branch}}
+    uri: {{sandbox-boshrelease-git-url}}
+    branch: {{sandbox-boshrelease-master-branch}}
 
 
 - name: boshrelease-version
@@ -101,7 +101,6 @@ resources:
 
 jobs:
 - name: jobs-elpaaso-starter-parent
-  public: true
   plan:
   - get: elpaaso-starter-parent
     trigger: true
@@ -110,10 +109,8 @@ jobs:
     config:
       platform: linux
       image: docker:///java#8-jdk
-
       inputs:
        - name: elpaaso-starter-parent
-
       run:
         path: ls
         args: [-lrt]
@@ -224,7 +221,24 @@ jobs:
     - get: elpaaso-sandbox-boshrelease
       passed: [jobs-elpaaso-sandbox-boshrelease]
     - get: boshrelease-version
-
+      params: {bump: final}
+  - task: finalize-release
+    file: elpaaso-sandbox-boshrelease/ci/finalize-release.yml
+    config:
+      params:
+        GH_USER: {{github-username}}
+        GH_USER_EMAIL: {{github-email}}
+        GH_TOKEN: {{github-token}}
+  - aggregate:
+#    - put: boshrelease-version
+#      params:
+    - put: sandbox-boshrelease-master
+      params:
+        repository: final-release-repo
+        tag: version/version
+        tag_prefix: v
+#    - put: bosh-final-release
+#      params: {file: bosh-final-release/elpaaso-sandbox-boshrelease-*.tgz}
 
 
 - name: NEW-major
