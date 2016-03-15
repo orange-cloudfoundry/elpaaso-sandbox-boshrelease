@@ -24,7 +24,6 @@ inputs:
 
 outputs:
 - name: bosh-release-candidate
-- name: elpaaso-sandbox-boshrelease
 - name: final-release-repo
 - name: bosh-final-release-tarball
 
