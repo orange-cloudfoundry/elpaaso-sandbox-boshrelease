@@ -28,4 +28,4 @@ outputs:
 - name: bosh-final-release-tarball
 
 run:
-  path: elpaaso-sandbox-boshrelease/ci/finalize-candidate.sh
+  path: elpaaso-sandbox-boshrelease/ci/finalize-release.sh
