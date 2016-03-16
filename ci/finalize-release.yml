@@ -21,9 +21,9 @@ image_resource:
 inputs:
 - name: elpaaso-sandbox-boshrelease
 - name: boshrelease-version
+- name: bosh-release-candidate
 
 outputs:
-- name: bosh-release-candidate
 - name: final-release-repo
 - name: bosh-final-release-tarball
 
