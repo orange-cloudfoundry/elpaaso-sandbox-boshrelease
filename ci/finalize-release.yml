@@ -22,6 +22,7 @@ inputs:
 - name: elpaaso-sandbox-boshrelease
 - name: boshrelease-version
 - name: bosh-release-candidate
+- name: bosh-credentials
 
 outputs:
 - name: final-release-repo
@@ -29,3 +30,4 @@ outputs:
 
 run:
   path: elpaaso-sandbox-boshrelease/ci/finalize-release.sh
+

@@ -29,15 +29,15 @@ if [ -z "$VERSION" ]; then
 fi
 
 git clone ./elpaaso-sandbox-boshrelease $FINAL_RELEASE_REPO
+
+cp bosh-credentials/ci/config/private.yml $FINAL_RELEASE_REPO/config/private.yml
+
 pushd $FINAL_RELEASE_REPO
     echo "Checkout branch $RELEASE_CANDIDATE_BRANCH"
 
     git checkout -b $RELEASE_CANDIDATE_BRANCH
     git config --global user.name "$GH_USER"
     git config --global user.email "$GH_USER_EMAIL"
-    git config credential.helper "store --file=.git/credentials"
-    echo "https://$GH_TOKEN:@github.com" > .git/credentials
-    git config --global push.default simple
 
     RELEASE_TGZ=$PWD/releases/elpaaso-sandbox-boshrelease/elpaaso-sandbox-boshrelease-${VERSION}.tgz
 
