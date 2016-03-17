@@ -94,18 +94,25 @@ resources:
     skip_ssl_verification: {{resource-manifests-skip-ssl-verification}}
     paths: [deployments/elpaaso-sandbox-ci/]
 
+- name: bosh-credentials
+  type: git
+  source:
+    uri: {{bosh-credentials-uri}}
+    skip_ssl_verification: {{bosh-credentials-skip-ssl-verification}}
+    paths: [ci/config]
+
 - name: route-registrar-boshrelease
   type: bosh-io-release
   source:
     repository: cloudfoundry-community/route-registrar-boshrelease
 
 jobs:
-- name: jobs-elpaaso-starter-parent
+- name: job-elpaaso-starter-parent
   plan:
   - get: elpaaso-starter-parent
     trigger: true
+    attempts: 3
   - task: unit-test
-    #file: elpaaso-sandbox-ui/ci/unit-test.yml
     config:
       platform: linux
       image: docker:///java#8-jdk
@@ -115,14 +122,16 @@ jobs:
         path: ls
         args: [-lrt]
 
-- name: jobs-elpaaso-sandbox-service
+- name: job-elpaaso-sandbox-service
   plan:
   - aggregate:
     - get: elpaaso-starter-parent
       trigger: true
-      passed: [jobs-elpaaso-starter-parent]
+      passed: [job-elpaaso-starter-parent]
+      attempts: 3
     - get: elpaaso-sandbox-service
       trigger: true
+      attempts: 3
   - task: unit-test
     file: elpaaso-sandbox-service/ci/unit-test.yml
   - task: deploy
@@ -132,14 +141,16 @@ jobs:
         BINTRAY_USER: {{bintray_username}}
         BINTRAY_PASSWORD: {{bintray_password}}
 
-- name: jobs-elpaaso-sandbox-ui
+- name: job-elpaaso-sandbox-ui
   plan:
   - aggregate:
     - get: elpaaso-starter-parent
       trigger: true
-      passed: [jobs-elpaaso-starter-parent]
+      passed: [job-elpaaso-starter-parent]
+      attempts: 3
     - get: elpaaso-sandbox-ui
       trigger: true
+      attempts: 3
   - task: unit-test
     file: elpaaso-sandbox-ui/ci/unit-test.yml
   - task: deploy
@@ -149,19 +160,25 @@ jobs:
         BINTRAY_USER: {{bintray_username}}
         BINTRAY_PASSWORD: {{bintray_password}}
 
-- name: jobs-elpaaso-sandbox-boshrelease
+- name: job-elpaaso-sandbox-boshrelease
   plan:
   - aggregate:
     - get: elpaaso-sandbox-service
       trigger: true
-      passed: [jobs-elpaaso-sandbox-service]
+      passed: [job-elpaaso-sandbox-service]
+      attempts: 3
     - get: elpaaso-sandbox-ui
       trigger: true
-      passed: [jobs-elpaaso-sandbox-ui]
+      passed: [job-elpaaso-sandbox-ui]
+      attempts: 3
     - get: elpaaso-sandbox-boshrelease
       trigger: true
-    - get: boshrelease-version
+      attempts: 3
+#    - get: boshrelease-version
+#      params: {pre: rc}
+    - put: boshrelease-version
       params: {pre: rc}
+      attempt: 3
   - task: create-release-candidate
     file: elpaaso-sandbox-boshrelease/ci/create-release-candidate.yml
     config:
@@ -171,14 +188,13 @@ jobs:
         GH_TOKEN: {{github-token}}
   - put: bosh-release-candidate
     params: {file: bosh-release-candidate/elpaaso-sandbox-boshrelease-*.tgz}
-  - put: boshrelease-version
-    params: {pre: rc}
 
-- name: jobs-elpaaso-sandbox-boshrelease-deploy
+
+- name: job-elpaaso-sandbox-boshrelease-deploy
   plan:
   - aggregate:
     - get: bosh-release-candidate
-      passed: [jobs-elpaaso-sandbox-boshrelease]
+      passed: [job-elpaaso-sandbox-boshrelease]
       trigger: true
       attempts: 3
     - get: route-registrar-boshrelease
@@ -202,33 +218,40 @@ jobs:
 #  plan:
 #  - aggregate:
 #    - get: bosh-release-candidate
-#      passed: [jobs-elpaaso-sandbox-boshrelease-deploy]
+#      passed: [job-elpaaso-sandbox-boshrelease-deploy]
 #      trigger: true
 
 - name: promote-elpaaso-sandbox-boshrelease
   plan:
   - aggregate:
     - get: bosh-release-candidate
-#      passed: [jobs-elpaaso-sandbox-boshrelease-deploy, elpaaso-sandbox-boshrelease-acceptance-test]
-      passed: [jobs-elpaaso-sandbox-boshrelease-deploy]
+#      passed: [job-elpaaso-sandbox-boshrelease-deploy, elpaaso-sandbox-boshrelease-acceptance-test]
+      passed: [job-elpaaso-sandbox-boshrelease-deploy]
+    attempts: 3
 
-- name: jobs-elpaaso-sandbox-boshrelease-final
+- name: job-elpaaso-sandbox-boshrelease-final
   plan:
   - aggregate:
     - get: bosh-release-candidate
       passed: [promote-elpaaso-sandbox-boshrelease]
       trigger: true
+      attempts: 3
     - get: elpaaso-sandbox-boshrelease
-      passed: [jobs-elpaaso-sandbox-boshrelease]
+      passed: [job-elpaaso-sandbox-boshrelease]
+      attempts: 3
     - get: boshrelease-version
       params: {bump: final}
+      attempts: 3
+    - get: bosh-credentials
+      trigger: true
+      params: { submodules: none}
+      attempts: 3
   - task: finalize-release
     file: elpaaso-sandbox-boshrelease/ci/finalize-release.yml
     config:
       params:
         GH_USER: {{github-username}}
         GH_USER_EMAIL: {{github-email}}
-        GH_TOKEN: {{github-token}}
   - aggregate:
 #    - put: boshrelease-version
 #      params:
