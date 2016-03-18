@@ -35,7 +35,7 @@ pushd elpaaso-sandbox-boshrelease
   git config --global push.default simple
 
   echo "Create release candidate branch"
-  git checkout -b release-candidate/$VERSION
+  git checkout -b release-candidate/${VERSION}
 
   git status
 
@@ -45,21 +45,21 @@ pushd elpaaso-sandbox-boshrelease
   echo "Getting elpaaso-sandbox-service commit"
   pushd src/elpaaso-sandbox-service
     git fetch
-    git merge --commit HEAD $SANDBOX_SERVICE_COMMIT
+    git merge --commit HEAD ${SANDBOX_SERVICE_COMMIT}
   popd
 
   echo "Getting elpaaso-sandbox-ui commit"
   pushd src/elpaaso-sandbox-ui
     git fetch
-    git merge --commit HEAD $SANDBOX_UI_COMMIT
+    git merge --commit HEAD ${SANDBOX_UI_COMMIT}
   popd
 
   git status
 #  echo "Updating submodule"
 #  ./update
   echo "Committing submodule update"
-  git commit -a -m "Updading submodule SANDBOX_UI_COMMIT to $SANDBOX_UI_COMMIT and SANDBOX_SERVICE_COMMIT to $SANDBOX_SERVICE_COMMIT"
-  git push origin release-candidate/$VERSION
+  git commit -a -m "Updading submodule SANDBOX_UI to $SANDBOX_UI_COMMIT and SANDBOX_SERVICE to $SANDBOX_SERVICE_COMMIT"
+  git push origin release-candidate/${VERSION}
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"
