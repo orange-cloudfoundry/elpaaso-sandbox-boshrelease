@@ -20,7 +20,7 @@ FINAL_RELEASE_REPO=$PWD/final-release-repo
 CANDIDATE_DIR=$PWD/bosh-release-candidate
 
 
-VERSION="$(cat boshrelease-version/number)"
+VERSION="$(cat boshrelease-version/version)"
 RELEASE_CANDIDATE_BRANCH="release-candidate/${VERSION}"
 
 if [ -z "$VERSION" ]; then
