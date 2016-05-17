@@ -14,8 +14,8 @@
 
 set -e
 OUTPUT="$PWD/bosh-release-candidate"
-VERSION="$(cat boshrelease-version/number)"
-
+VERSION="$(cat boshrelease-version/version)"
+#OPENJDK_DIR="$PWD/openjdk"
 
 echo "DEBUG - OUTPUT: <$OUTPUT> - VERSION: <$VERSION>"
 
@@ -60,6 +60,12 @@ pushd elpaaso-sandbox-boshrelease
   echo "Committing submodule update"
   git commit -a -m "Updading submodule SANDBOX_UI to $SANDBOX_UI_COMMIT and SANDBOX_SERVICE to $SANDBOX_SERVICE_COMMIT"
   git push origin release-candidate/${VERSION}
+
+#  echo "Sync blobs"
+#  bosh sync blobs
+
+#  echo "Getting OpenJDK blobs"
+#  bosh add blob ${OPENJDK_DIR}/openjdk.tar.gz openjdk
 
   echo "Creating bosh release"
   bosh -n create release --with-tarball --name elpaaso-sandbox-boshrelease --version "$VERSION"

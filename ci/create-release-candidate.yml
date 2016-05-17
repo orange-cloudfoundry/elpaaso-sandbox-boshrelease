@@ -23,18 +23,11 @@ inputs:
 - name: elpaaso-sandbox-service
 - name: elpaaso-sandbox-ui
 - name: boshrelease-version
+#- name: open-jdk
 
 outputs:
 - name: bosh-release-candidate
 
 run:
   path: elpaaso-sandbox-boshrelease/ci/create-release-candidate.sh
-
-params:
-  bucket:
-  key:
-  access_key_id:
-  secret_access_key:
-  region_name:
-
 
