@@ -106,6 +106,17 @@ resources:
   source:
     repository: cloudfoundry-community/route-registrar-boshrelease
 
+- name: deploy-to-cf
+  type: cf
+  source:
+    api: {{cf-api-endpoint}}
+    username: {{cf-username}}
+    password: {{cf-userpassword}}
+    organization: {{cf-org}}
+    space: {{cf-space}}
+    skip_cert_check: false
+
+
 jobs:
 - name: job-elpaaso-starter-parent
   plan:
@@ -113,14 +124,15 @@ jobs:
     trigger: true
     attempts: 3
   - task: unit-test
-    config:
-      platform: linux
-      image: docker:///java#8-jdk
-      inputs:
-       - name: elpaaso-starter-parent
-      run:
-        path: ls
-        args: [-lrt]
+    input_mapping: {project-path: elpaaso-starter-parent}
+    file: project-path/ci/unit-test.yml
+
+  - task: deploy
+    input_mapping: {project-path: elpaaso-starter-parent}
+    file: project-path/ci/deploy.yml
+    params:
+      BINTRAY_USER: {{bintray_username}}
+      BINTRAY_PASSWORD: {{bintray_password}}
 
 - name: job-elpaaso-sandbox-service
   plan:
@@ -132,14 +144,18 @@ jobs:
     - get: elpaaso-sandbox-service
       trigger: true
       attempts: 3
+    - get : resource-manifests
+      attempts: 3
   - task: unit-test
     file: elpaaso-sandbox-service/ci/unit-test.yml
   - task: deploy
     file: elpaaso-sandbox-service/ci/deploy.yml
-    config:
-      params:
-        BINTRAY_USER: {{bintray_username}}
-        BINTRAY_PASSWORD: {{bintray_password}}
+    params:
+      BINTRAY_USER: {{bintray_username}}
+      BINTRAY_PASSWORD: {{bintray_password}}
+  - put: deploy-to-cf
+    params:
+      manifest: resource-manifests/deployments/elpaaso-sandbox-service-qa/manifest.yml
 
 - name: job-elpaaso-sandbox-ui
   plan:
@@ -151,14 +167,19 @@ jobs:
     - get: elpaaso-sandbox-ui
       trigger: true
       attempts: 3
+    - get : resource-manifests
+      attempts: 3
   - task: unit-test
     file: elpaaso-sandbox-ui/ci/unit-test.yml
   - task: deploy
     file: elpaaso-sandbox-ui/ci/deploy.yml
-    config:
-      params:
-        BINTRAY_USER: {{bintray_username}}
-        BINTRAY_PASSWORD: {{bintray_password}}
+    params:
+      BINTRAY_USER: {{bintray_username}}
+      BINTRAY_PASSWORD: {{bintray_password}}
+  - put: deploy-to-cf
+    params:
+      manifest: resource-manifests/deployments/elpaaso-sandbox-ui-qa/manifest.yml
+
 
 - name: job-elpaaso-sandbox-boshrelease
   plan:
@@ -181,11 +202,10 @@ jobs:
       attempt: 3
   - task: create-release-candidate
     file: elpaaso-sandbox-boshrelease/ci/create-release-candidate.yml
-    config:
-      params:
-        GH_USER: {{github-username}}
-        GH_USER_EMAIL: {{github-email}}
-        GH_TOKEN: {{github-token}}
+    params:
+      GH_USER: {{github-username}}
+      GH_USER_EMAIL: {{github-email}}
+      GH_TOKEN: {{github-token}}
   - put: bosh-release-candidate
     params: {file: bosh-release-candidate/elpaaso-sandbox-boshrelease-*.tgz}
 
@@ -248,17 +268,16 @@ jobs:
       attempts: 3
   - task: finalize-release
     file: elpaaso-sandbox-boshrelease/ci/finalize-release.yml
-    config:
-      params:
-        GH_USER: {{github-username}}
-        GH_USER_EMAIL: {{github-email}}
+    params:
+      GH_USER: {{github-username}}
+      GH_USER_EMAIL: {{github-email}}
   - aggregate:
 #    - put: boshrelease-version
 #      params:
     - put: sandbox-boshrelease-master
       params:
         repository: final-release-repo
-        tag: version/version
+        tag: boshrelease-version/version
         tag_prefix: v
 #    - put: bosh-final-release
 #      params: {file: bosh-final-release/elpaaso-sandbox-boshrelease-*.tgz}
