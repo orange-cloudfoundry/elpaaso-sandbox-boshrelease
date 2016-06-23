@@ -145,6 +145,8 @@ jobs:
       trigger: true
       attempts: 3
     - get : resource-manifests
+      trigger: true
+      params: { submodules: none}
       attempts: 3
   - task: unit-test
     file: elpaaso-sandbox-service/ci/unit-test.yml
@@ -168,6 +170,8 @@ jobs:
       trigger: true
       attempts: 3
     - get : resource-manifests
+      trigger: true
+      params: { submodules: none}
       attempts: 3
   - task: unit-test
     file: elpaaso-sandbox-ui/ci/unit-test.yml
